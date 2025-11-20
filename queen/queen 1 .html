@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To the Moon of My Midnight Sky</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&family=Mr+De+Haviland&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sand: #EDC9AF;
+            --navy: #0A2342;
+            --gold: #D4AF37;
+            --light: #F8F1E5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--navy);
+            background-color: var(--sand);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Header/Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            background-color: rgba(10, 35, 66, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--light);
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a:hover {
+            color: var(--gold);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--gold);
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 101;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 2px;
+            background-color: var(--light);
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(to bottom, var(--navy) 0%, var(--sand) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            z-index: 10;
+            padding: 0 2rem;
+        }
+        
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-style: italic;
+            color: var(--light);
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--light);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards 0.8s;
+        }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--light);
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        
+        /* Stars Animation */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: var(--light);
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        /* Gallery Section */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--navy);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--gold);
+        }
+        
+        
+        .gallery {
+            display: flex;
+            overflow-x: auto;
+            padding: 2rem 0;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            background-color: aquamarine;
+        }
+        
+        .gallery::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .gallery::-webkit-scrollbar-track {
+            background: rgba(237, 201, 175, 0.3);
+        }
+        
+        .gallery::-webkit-scrollbar-thumb {
+            background-color: var(--gold);
+            border-radius: 4px;
+        }
+        
+        .polaroid {
+            flex: 0 0 300px;
+            margin: 0 1rem;
+            background: white;
+            padding: 1rem 1rem 2rem 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transform: rotate(var(--rotation));
+            transition: transform 0.3s ease;
+            scroll-snap-align: start;
+            position: relative;
+        }
+        
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+        
+        .polaroid img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .polaroid-caption {
+            font-family: 'Mr De Haviland', cursive;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--navy);
+        }
+        
+        /* Love Notes Section */
+        .love-notes {
+            background-color: var(--navy);
+            color: var(--light);
+        }
+        
+        .love-notes .section-title {
+            color: var(--light);
+        }
+        
+        .notes-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .note {
+            background-color: rgba(248, 241, 229, 0.1);
+            padding: 2rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--gold);
+            display: none;
+        }
+        
+        .note.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .note-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            min-height: 200px;
+        }
+        
+        .note-date {
+            text-align: right;
+            font-style: italic;
+            margin-top: 1rem;
+            color: var(--sand);
+        }
+        
+        .note-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .note-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(248, 241, 229, 0.3);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .note-dot.active {
+            background-color: var(--gold);
+            transform: scale(1.2);
+        }
+        
+        /* About Her Section */
+        .qualities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .quality {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            background-color: rgba(248, 241, 229, 0.5);
+        }
+        
+        .quality:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background-color: var(--light);
+        }
+        
+        .quality-icon {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        
+        .quality h3 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            color: var(--navy);
+        }
+        
+        /* Journey Section */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 4rem auto;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background-color: var(--gold);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1.5px;
+        }
+        .div
+        
+        .milestone {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .milestone.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .milestone::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--sand);
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .left::after {
+            right: -10px;
+        }
+        
+        .right::after {
+            left: -10px;
+        }
+        
+        .milestone-content {
+            padding: 20px;
+            background-color: var(--light);
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .milestone-content::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            top: 15px;
+        }
+        
+        .left .milestone-content::before {
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--light) transparent transparent;
+            right: -10px;
+        }
+        
+        .right .milestone-content::before {
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--light);
+            left: -10px;
+        }
+        
+        .milestone-date {
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--navy);
+            color: var(--light);
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .heart {
+            color: #ff6b6b;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+            75% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav ul {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: var(--navy);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: right 0.5s ease;
+            }
+            
+            nav ul.active {
+                right: 0;
+            }
+            
+            nav ul li {
+                margin: 1.5rem 0;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hamburger.active div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .milestone {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .milestone::after {
+                left: 21px;
+            }
+            
+            .left::after, .right::after {
+                left: 21px;
+            }
+            
+            .right {
+                left: 0;
+            }
+            
+            .left .milestone-content::before, .right .milestone-content::before {
+                border-width: 10px 10px 10px 0;
+                border-color: transparent var(--light) transparent transparent;
+                left: auto;
+                right: -10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">To Her</a>
+        <div class="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#notes">Love Notes</a></li>
+                <li><a href="#about">About Her</a></li>
+                <li><a href="#journey">Our Journey</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="stars" id="stars-container"></div>
+        <div class="hero-content">
+            <h1>To the moon of my midnight sky...</h1>
+            <p>Every moment with you is a star in my universe, brightening my darkest nights and warming my coldest days.</p>
+        </div>
+        <div class="scroll-down">↓</div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section">
+        <h2 class="section-title">Cherished Memories</h2>
+        <div class="gallery">
+            <div class="polaroid" style="--rotation: -3deg">
+                <img src="beth.jpg" alt="Memory 1">
+                <p class="polaroid-caption">Our first adventure</p>
+            </div>
+            <div class="polaroid" style="--rotation: 4deg">
+                <img src="bet.jpg" alt="Memory 4">
+                <p class="polaroid-caption">Your beautiful smile</p>
+            </div>
+            <div class="polaroid" style="--rotation: -2deg">
+                <img src="be.jpg" alt="Memory 5">
+                <p class="polaroid-caption">Our little moments</p>
+            </div>
+            <div class="polaroid" style="--rotation: 4deg">
+                <img src="b.jpg" alt="Memory 6">
+                <p class="polaroid-caption">Your shortness</p>
+        </div>
+    </section>
+
+    <!-- Love Notes Section -->
+    <section id="notes" class="section love-notes">
+        <h2 class="section-title">Love Notes</h2>
+        <div class="notes-container">
+            <div class="note active">
+                <div class="note-content" id="typewriter-text">
+                    My dearest,<br><br>
+                    If I were to count the ways you make my heart skip, I'd run out of numbers before I ran out of reasons. Your laughter is my favorite melody, your smile my most cherished view. Every day with you is a page in a story I never want to end.
+                </div>
+                <div class="note-date">June 12, 2023</div>
+            </div>
+            <div class="note">
+                <div class="note-content">
+                    Darling,<br><br>
+                    They say home is where the heart is, but my heart has taken permanent residence in your eyes. In your gaze, I find comfort, passion, and a love so deep it anchors my soul. No matter where we are, with you I am always home.
+                </div>
+                <div class="note-date">August 5, 2023</div>
+            </div>
+            <div class="note">
+                <div class="note-content">
+                    My love,<br><br>
+                    Like the moon pulls the tides, you draw me in with a force I cannot resist. Your love illuminates my darkest nights, and your warmth thaws my coldest days. I am forever under your spell, willingly lost in your orbit.
+                </div>
+                <div class="note-date">October 20, 2023</div>
+            </div>
+            <div class="note-nav">
+                <div class="note-dot active" data-index="0"></div>
+                <div class="note-dot" data-index="1"></div>
+                <div class="note-dot" data-index="2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Her Section -->
+    <section id="about" class="section">
+        <h2 class="section-title">About Her</h2>
+        <div class="qualities">
+            <div class="quality">
+                <div class="quality-icon">🌙</div>
+                <h3>Her Beauty</h3>
+                <p>Like moonlight on desert sands, her beauty is both gentle and breathtaking, leaving me in awe with every glance.</p>
+            </div>
+            <div class="quality">
+                <div class="quality-icon">☀️</div>
+                <h3>Her Warmth</h3>
+                <p>Her presence is like sunrise after the coldest night, filling my world with light and comfort.</p>
+            </div>
+            <div class="quality">
+                <div class="quality-icon">🎨</div>
+                <h3>Her Creativity</h3>
+                <p>She paints my world with colors I never knew existed, turning ordinary moments into masterpieces.</p>
+            </div>
+            <div class="quality">
+                <div class="quality-icon">💫</div>
+                <h3>Her Spirit</h3>
+                <p>Fierce yet gentle, strong yet kind - a constellation of qualities that shine brighter than any star.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section id="journey" class="section">
+        <h2 class="section-title">Our Journey</h2>
+        <div class="timeline">
+            <div class="milestone left">
+                <div class="milestone-content">
+                    <div class="milestone-date">June 2022</div>
+                    <p>Our paths crossed unexpectedly, a chance meeting that would change everything. I didn't know it then, but my life was about to become infinitely brighter.</p>
+                </div>
+            </div>
+            <div class="milestone right">
+                <div class="milestone-content">
+                    <div class="milestone-date">August 2022</div>
+                    <p>Our first date under the stars. You laughed at my jokes and I fell for your smile. That night, I knew there was something special about you.</p>
+                </div>
+            </div>
+            <div class="milestone left">
+                <div class="milestone-content">
+                    <div class="milestone-date">December 2022</div>
+                    <p>Cozy nights. You became my favorite person to share both the extraordinary and ordinary moments with.</p>
+                </div>
+            </div>
+            <div class="milestone right">
+                <div class="milestone-content">
+                    <div class="milestone-date">March 2023</div>
+                    <p>Our first trip together. Watching you experience new places with such wonder made me see the world through fresh eyes.</p>
+                </div>
+            </div>
+            <div class="milestone left">
+                <div class="milestone-content">
+                    <div class="milestone-date">Today</div>
+                    <p>Every morning I wake up grateful for you. Every night I fall asleep dreaming of our future together.</p>
+                </div>
+            </div>
+            <div class="milestone right">
+                <div class="milestone-content">
+                    <div class="milestone-date">Tomorrow</div>
+                    <p>All the adventures yet to come, the memories we'll create, the love that will continue to grow with each passing day.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made with <span class="heart">♥</span> for the most wonderful person I know</p>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('nav ul');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+        
+        // Create stars
+        const starsContainer = document.getElementById('stars-container');
+        const starCount = 100;
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            // Random size between 1 and 3px
+            const size = Math.random() * 2 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // Random position
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            
+            // Random animation duration between 2 and 5 seconds
+            const duration = Math.random() * 3 + 2;
+            star.style.setProperty('--duration', `${duration}s`);
+            
+            // Random delay
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            
+            starsContainer.appendChild(star);
+        }
+        
+        // Love notes carousel
+        const notes = document.querySelectorAll('.note');
+        const dots = document.querySelectorAll('.note-dot');
+        let currentNote = 0;
+        
+        function showNote(index) {
+            notes.forEach(note => note.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            notes[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentNote = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                showNote(parseInt(dot.dataset.index));
+            });
+        });
+        
+        // Auto-rotate notes
+        setInterval(() => {
+            currentNote = (currentNote + 1) % notes.length;
+            showNote(currentNote);
+        }, 5000);
+        
+        // Scroll to sections
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animate timeline on scroll
+        const milestones = document.querySelectorAll('.milestone');
+        
+        function checkMilestones() {
+            const triggerBottom = window.innerHeight / 5 * 4;
+            
+            milestones.forEach(milestone => {
+                const milestoneTop = milestone.getBoundingClientRect().top;
+                
+                if (milestoneTop < triggerBottom) {
+                    milestone.classList.add('visible');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkMilestones);
+        checkMilestones(); // Check on load
+        
+        // Typewriter effect for the first note
+        const noteText = document.getElementById('typewriter-text');
+        const originalText = noteText.innerHTML;
+        noteText.innerHTML = '';
+        
+        let i = 0;
+        const speed = 20; // typing speed in ms
+        
+        function typeWriter() {
+            if (i < originalText.length) {
+                noteText.innerHTML += originalText.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            }
+        }
+        
+        // Start typewriter effect after a delay
+        setTimeout(typeWriter, 1000);
+    </script>
+</body>
+</html>
